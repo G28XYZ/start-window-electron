@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-// import { ipcRenderer } from 'electron';
 
 export const StartButton = () => {
 	const [isOpen, setIsOpen] = useState(false);

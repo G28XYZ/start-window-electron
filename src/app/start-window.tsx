@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react"
-import { newsApi } from "./utils/api";
+import { api } from "./utils/api";
 import { IArticle, IGame } from "./utils/types";
 
 export const Search = () => {
@@ -31,8 +31,8 @@ export const Games = () => {
 	const [games, setGames] = useState<IGame[]>([]);
 
 	useEffect(() => {
-		const res = fetch('/freegame');
-		res.then(data => data.ok ? data.json() : 'error').then(data => data !== 'error' && setGames(data || []));
+		const res = api.getGames();
+		res.then(data => data && setGames(data || []));
 	}, [])
 
 	return <div className="start-menu-content-games">
@@ -66,7 +66,7 @@ export const NewsContainer = () => {
 	const [q, setQ] = useState('Microsoft')
 
 	useEffect(() => {
-		const res = newsApi.getNews(q);
+		const res = api.getNews(q);
 		res.then(data => setNews(data?.articles || []));
 	}, [q])
 
@@ -85,9 +85,9 @@ export const NewsContainer = () => {
 		</div>
 }
 
-export const RecentApp = ({ name, path }: typeof RECENT_APPS[number]) => {
+export const RecentApp = ({ name, path, base64 }: typeof RECENT_APPS[number]) => {
 	return <div key={name} className="recent-app">
-						<img src={path} alt="" />
+						<img src={base64} alt="" />
 						<div>{name}</div>
 					</div>
 }

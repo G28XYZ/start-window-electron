@@ -6,10 +6,12 @@ import fs from 'node:fs';
 const getApps = () => {
 	const imagesPath = path.join(__dirname, 'src', 'app', 'images', 'apps');
 
-	const apps: { name: string; path: string }[] = [];
+	const apps: { name: string; path: string; base64: string }[] = [];
 
 	fs.readdirSync(imagesPath).forEach(file => {
-		apps.push({ name: file.split('.')[0], path: path.join('src', 'app', 'images', 'apps', file) })
+		const filebuffer = fs.readFileSync(path.join(imagesPath, file));
+		console.log(`data:image/png;base64,${filebuffer.toString('base64')}`);
+		apps.push({ name: file.split('.')[0], path: path.join('src', 'app', 'images', 'apps', file), base64: `data:image/png;base64,${filebuffer.toString('base64')}`})
 	});
 
 	return apps;

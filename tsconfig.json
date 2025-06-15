@@ -9,7 +9,7 @@
     "noImplicitAny": true,
     "sourceMap": true,
     "baseUrl": ".",
-    "outDir": "dist",
+    "outDir": "renderer/main_window",
     "moduleResolution": "node",
     "resolveJsonModule": true
   }

@@ -6,16 +6,30 @@ const format = (text: string, ...args: string[]) => {
 	return text;
 }
 
-class NEWS_API {
-	private url = `https://newsapi.org/v2/everything?q={0}&from={1}&sortBy=popularity&apiKey=${NEWS_API_KEY}`
+class API {
+	private news_url = `https://newsapi.org/v2/everything?q={0}&from={1}&sortBy=popularity&apiKey=${NEWS_API_KEY}`;
+	private games_url = 'https://www.freetogame.com/api/games';
 
 	private _handleRequest(res: Promise<Response>) {
 		return res.then(data => data.ok ? data.json() : { error: 'error' })
 	}
 
-	getNews(q = 'Apple') {
-		return this._handleRequest(fetch(format(this.url, q, new Date().toLocaleDateString().replace(/\./g, '-'))))
+	getNews<T = any>(q = 'Microsoft') {
+		const url = format(this.news_url, q, new Date().toLocaleDateString().replace(/\./g, '-'));
+		apiNodeFetch.GET(url);
+		
+		return new Promise<T>(resolve => {
+			electronAPI.onFetchData((data) => data.url === url && resolve(data.data))
+		})
+	}
+
+	getGames<T = any>() {
+		apiNodeFetch.GET(this.games_url)
+
+		return new Promise<T>(resolve => {
+			electronAPI.onFetchData((data) => data.url === this.games_url && resolve(data.data))
+		})
 	}
 }
 
-export const newsApi = new NEWS_API();
+export const api = new API();

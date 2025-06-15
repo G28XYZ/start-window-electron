@@ -9,19 +9,19 @@ let startWindow: BrowserWindow;
 
 const createWindow = () => {
 	const primaryDisplay = screen.getPrimaryDisplay();
-  const { width, height } = primaryDisplay.size;
+	const { width, height } = primaryDisplay.workArea;
+
 
   mainWindow = new BrowserWindow({
     width,
     height: 74,
-		x: 0,
-		y: height,
+	x: 0,
+	y: height - 74,
     frame: false,
-		transparent   : true,
-		// opacity       : 0.9,
-		webPreferences: {
-			preload: path.join(__dirname, 'preload.js'),
-		},
+	transparent   : true,
+	webPreferences: {
+		preload: path.join(__dirname, 'preload.js'),
+	},
   });
 
   if (MAIN_WINDOW_VITE_DEV_SERVER_URL) {
@@ -61,16 +61,15 @@ ipcMain.on('open-start-window', () => {
 		transparent: true,
 		x          : (width - winWidth) / 2,
 		y          : mainY - winHeight - 25,
-		// opacity    : 0.9,
 		title      : 'Start Window',
-		webPreferences: { preload: path.join(__dirname, 'preload.js') },
+		webPreferences: { preload: path.join(__dirname, 'preload-window.js') },
 	});
 
 
   if (MAIN_WINDOW_VITE_DEV_SERVER_URL) {
     startWindow.loadURL(MAIN_WINDOW_VITE_DEV_SERVER_URL + '/start_window');
   } else {
-    startWindow.loadFile(path.join(__dirname, `../renderer/${MAIN_WINDOW_VITE_NAME}/start-window.html`));
+    startWindow.loadFile(path.join(__dirname, `../renderer/${MAIN_WINDOW_VITE_NAME}/index.html`));
   }
 
 	mainWindow.focus();
@@ -87,11 +86,19 @@ ipcMain.on('close-start-window', () => {
 });
 
 ipcMain.on('close-app', () => {
-		if(startWindow) {
-			startWindow.destroy();
-			startWindow = null;
-		}
-		if(mainWindow) {
-			mainWindow.destroy();
-		}
+	if(startWindow) {
+		startWindow.destroy();
+		startWindow = null;
+	}
+	if(mainWindow) {
+		mainWindow.destroy();
+	}
+})
+
+ipcMain.on('fetch-get', async (ev, url, from) => {
+	const res = await fetch(url, { mode:'no-cors' });
+
+	if(from === 'start_window') {
+		startWindow.webContents.send('fetch-data', res.ok ? { url, data: await res.json() } : false)
+	}
 })
