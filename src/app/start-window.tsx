@@ -96,7 +96,9 @@ export const Weather = () => {
 	const [city, setCity] = useState('Москва');
 
 	return <div className="start-menu-content-weather">
-						<input placeholder="Город..." type="text" name="city" id="city" value={city} onChange={(e) => setCity(e.target.value)} />
+						<span>
+							Погода <input placeholder="Город..." type="text" name="city" id="city" value={city} onChange={(e) => setCity(e.target.value)} />
+						</span>
 						<iframe src={`https://wttr.in/${city}`} width="100%" />
 					</div>
 }

@@ -223,7 +223,7 @@
   height: 100%;
 }
 
-.start-menu-content-weather > input {
+.start-menu-content-weather input {
   height: 40px;
   box-sizing: border-box;
   background-color: rgb(49, 48, 48);
@@ -231,8 +231,8 @@
   outline: none;
   border-radius: 5px;
   padding-left: 10px;
+  margin-left: 20px;
   color: white;
-  width: -webkit-fill-available;
 }
 
 .news-item {
