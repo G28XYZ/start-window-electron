@@ -11,17 +11,18 @@ const createWindow = () => {
 	const primaryDisplay = screen.getPrimaryDisplay();
 	const { width, height } = primaryDisplay.workArea;
 
+	const [winWidth, winHeight] = [width, 60]
 
   mainWindow = new BrowserWindow({
-    width,
-    height: 74,
-	x: 0,
-	y: height - 74,
+		width: winWidth,
+		height: winHeight,
+		x: 0,
+		y: height - winHeight,
     frame: false,
-	transparent   : true,
-	webPreferences: {
-		preload: path.join(__dirname, 'preload.js'),
-	},
+		transparent   : true,
+		webPreferences: {
+			preload: path.join(__dirname, 'preload.js'),
+		},
   });
 
   if (MAIN_WINDOW_VITE_DEV_SERVER_URL) {
@@ -95,10 +96,14 @@ ipcMain.on('close-app', () => {
 	}
 })
 
-ipcMain.on('fetch-get', async (ev, url, from) => {
-	const res = await fetch(url, { mode:'no-cors' });
+const lastUrls: string[] = [];
+const data: Record<string, any> = {};
 
+ipcMain.on('fetch-get', async (ev, url, from) => {
+	const res = !lastUrls.includes(url) && await fetch(url, { mode:'no-cors' });
 	if(from === 'start_window') {
-		startWindow.webContents.send('fetch-data', res.ok ? { url, data: await res.json() } : false)
+		!lastUrls.includes(url) && (data[url] = res.ok ? { url, data: await res.json() } : false);
+		lastUrls.push(url);
+		startWindow.webContents.send('fetch-data', data[url])
 	}
 })
