@@ -155,15 +155,16 @@
   width: 100%;
   overflow: auto;
   display: flex;
-  background-color: #202020;
+  background-color: rgba(32, 32, 32, 0.9);
   padding: 20px 30px;
   border-radius: 10px;
   gap: 20px;
   box-sizing: border-box;
   flex-direction: column;
+  min-height: 200px;
 }
 
-.start-menu-content-news > div {
+.start-menu-content-news > .start-menu-content-news-list {
   display: flex;
   overflow: auto;
   gap: 20px;
@@ -186,7 +187,7 @@
   width: 100%;
   display: flex;
   flex-direction: column;
-  background-color: #202020;
+  background-color: rgba(32, 32, 32, 0.9);
   padding: 20px 30px;
   border-radius: 10px;
   box-sizing: border-box;
@@ -194,9 +195,10 @@
   margin-top: 10px;
   gap: 20px;
   overflow-y: hidden;
+  min-height: 200px;
 }
 
-.start-menu-content-games > div {
+.start-menu-content-games > .start-menu-content-games-list {
   display: flex;
   overflow: auto;
   gap: 20px;
@@ -207,7 +209,7 @@
   width: 100%;
   overflow: auto;
   display: flex;
-  background-color: #202020;
+  background-color: rgba(32, 32, 32, 0.9);
   padding: 20px 30px;
   border-radius: 10px;
   gap: 20px;
@@ -215,6 +217,7 @@
   margin-top: 10px;
   height: 100%;
   flex-direction: column;
+  min-height: 200px;
 }
 
 .weather-content {

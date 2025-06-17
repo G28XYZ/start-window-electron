@@ -2,7 +2,7 @@ import { app, BrowserWindow, ipcMain, screen } from 'electron';
 import path from 'node:path';
 import started from 'electron-squirrel-startup';
 import { SocksProxyAgent } from 'socks-proxy-agent';
-import axios, { ResponseType } from 'axios';
+import axios from 'axios';
 
 if (started) app.quit();
 
@@ -16,15 +16,13 @@ const createWindow = () => {
 	const [winWidth, winHeight] = [width, 60]
 
   mainWindow = new BrowserWindow({
-		width: winWidth,
-		height: winHeight,
-		x: 0,
-		y: height - winHeight,
-    frame: false,
+		width         : winWidth,
+		height        : winHeight,
+		x             : 0,
+		y             : height - winHeight,
+		frame         : false,
 		transparent   : true,
-		webPreferences: {
-			preload: path.join(__dirname, 'preload.js'),
-		},
+		webPreferences: { preload: path.join(__dirname, 'preload.js') },
   });
 
   if (MAIN_WINDOW_VITE_DEV_SERVER_URL) {
@@ -58,13 +56,13 @@ ipcMain.on('open-start-window', () => {
 	const [winHeight, winWidth] = [800, 800]
 
 	startWindow = new BrowserWindow({
-		width      : winWidth,
-		height     : winHeight,
-		frame      : false,
-		transparent: true,
-		x          : (width - winWidth) / 2,
-		y          : mainY - winHeight - 25,
-		title      : 'Start Window',
+		width         : winWidth,
+		height        : winHeight,
+		frame         : false,
+		transparent   : true,
+		x             : (width - winWidth) / 2,
+		y             : mainY - winHeight - 25,
+		title         : 'Start Window',
 		webPreferences: { preload: path.join(__dirname, 'preload-window.js') },
 	});
 
@@ -75,7 +73,7 @@ ipcMain.on('open-start-window', () => {
     startWindow.loadFile(path.join(__dirname, `../renderer/${MAIN_WINDOW_VITE_NAME}/index.html`));
   }
 
-	mainWindow.focus();
+	// mainWindow.focus();
 
 });
 
@@ -99,19 +97,19 @@ ipcMain.on('close-app', () => {
 })
 
 const lastUrls: string[] = [];
-const data: Record<string, any> = {};
+const dataCash: Record<string, any> = {};
 
-const socksProxyAgent = new SocksProxyAgent('');
+const socksProxyAgent = new SocksProxyAgent('socks://socksuser:socksuser@185.169.107.65:8467');
 
-ipcMain.on('fetch-get', async (ev, url, from, opt: { responseType: ResponseType }) => {
+ipcMain.on('fetch-get', async (ev, url, from, opt: { responseType: 'text' | 'json' | 'arraybuffer' }) => {
 
 	const { responseType='json' } = opt || {};
 
 	const res = !lastUrls.includes(url) && await axios.get(url, { httpsAgent: socksProxyAgent, responseType });
 
 	if(from === 'start_window') {
-		!lastUrls.includes(url) && (data[url] = res.data ? { url, data: res.data } : false);
+		!lastUrls.includes(url) && (dataCash[url] = res.data ? { url, data: res.data } : false);
 		lastUrls.push(url);
-		startWindow.webContents.send('fetch-data', data[url]);
+		startWindow.webContents.send('fetch-data', dataCash[url]);
 	}
 })
