@@ -9,6 +9,7 @@ const format = (text: string, ...args: string[]) => {
 class API {
 	private news_url = `https://newsapi.org/v2/everything?q={0}&from={1}&sortBy=popularity&apiKey=${NEWS_API_KEY}`;
 	private games_url = 'https://www.freetogame.com/api/games';
+	private weather_url = `https://wttr.in/`
 
 	private _handleRequest(res: Promise<Response>) {
 		return res.then(data => data.ok ? data.json() : { error: 'error' })
@@ -28,6 +29,15 @@ class API {
 
 		return new Promise<T>(resolve => {
 			electronAPI.onFetchData((data) => data.url === this.games_url && resolve(data.data))
+		})
+	}
+
+	getWeatherContent<T = any>(city = 'Moscow') {
+		const url = this.weather_url + city;
+		apiNodeFetch.GET(url, 'start_window', { resContent: 'text' })
+
+		return new Promise<T>(resolve => {
+			electronAPI.onFetchData((data) => data.url === url && resolve(data.data))
 		})
 	}
 }

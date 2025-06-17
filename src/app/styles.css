@@ -216,10 +216,11 @@
   flex-direction: column;
 }
 
-.start-menu-content-weather > iframe {
+.weather-content {
   outline: none;
   border: none;
-  border-radius: 10px;
+  overflow: auto;
+  font-size: 10px;
   height: 100%;
 }
 

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useRef, useState } from "react"
 import { api } from "./utils/api";
 import { IArticle, IGame } from "./utils/types";
 
@@ -11,7 +11,7 @@ export const Search = () => {
 }
 
 export const Game = ({ data }: { data: IGame }) => {
-	const [isHover, setIsHover] = useState(false);
+	const [_, setIsHover] = useState(false);
 
 	const handleClick = () => {
 		const link = document.createElement('a');
@@ -37,9 +37,7 @@ export const Games = () => {
 
 	return <div className="start-menu-content-games">
 			<span>Игры для вас</span>
-			<div>
-				{games.map(item => <Game key={item.id} data={item} />)}
-			</div>
+			<div>{games.map(item => <Game key={item.id} data={item} />)}</div>
 		</div>
 }
 
@@ -85,7 +83,7 @@ export const NewsContainer = () => {
 		</div>
 }
 
-export const RecentApp = ({ name, path, base64 }: typeof RECENT_APPS[number]) => {
+export const RecentApp = ({ name, base64 }: typeof RECENT_APPS[number]) => {
 	return <div key={name} className="recent-app">
 						<img src={base64} alt="" />
 						<div>{name}</div>
@@ -94,12 +92,25 @@ export const RecentApp = ({ name, path, base64 }: typeof RECENT_APPS[number]) =>
 
 export const Weather = () => {
 	const [city, setCity] = useState('Москва');
+	const iframeRef = useRef<HTMLIFrameElement>(null);
+
+	useEffect(() => {
+		api.getWeatherContent(city).then(data => {
+			if(data && iframeRef.current) {
+				iframeRef.current.src = "";
+				iframeRef.current.contentWindow.document.body.insertAdjacentHTML('beforebegin', data);
+			}
+		})
+	}, [city])
 
 	return <div className="start-menu-content-weather">
 						<span>
-							Погода <input placeholder="Город..." type="text" name="city" id="city" value={city} onChange={(e) => setCity(e.target.value)} />
+							Погода <input placeholder="Город..." type="text" name="city" id="city" value={city} onChange={(e) => {
+								iframeRef.current.src = "about:blank";
+								setCity(e.target.value)
+							}} />
 						</span>
-						<iframe src={`https://wttr.in/${city}`} width="100%" />
+						<iframe ref={iframeRef} className="weather-content" width='100%' />
 					</div>
 }
 
