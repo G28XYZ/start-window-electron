@@ -34,7 +34,15 @@ class API {
 
 	getWeatherContent<T = any>(city = 'Moscow') {
 		const url = this.weather_url + city;
-		apiNodeFetch.GET(url, 'start_window', { resContent: 'text' })
+		apiNodeFetch.GET(url, 'start_window', { responseType: 'text' })
+
+		return new Promise<T>(resolve => {
+			electronAPI.onFetchData((data) => data.url === url && resolve(data.data))
+		})
+	}
+
+	getImage<T = any>(url: string) {
+		apiNodeFetch.GET(url, 'start_window', { responseType: 'arraybuffer' })
 
 		return new Promise<T>(resolve => {
 			electronAPI.onFetchData((data) => data.url === url && resolve(data.data))

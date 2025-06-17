@@ -2,7 +2,7 @@ import { app, BrowserWindow, ipcMain, screen } from 'electron';
 import path from 'node:path';
 import started from 'electron-squirrel-startup';
 import { SocksProxyAgent } from 'socks-proxy-agent';
-import axios from 'axios';
+import axios, { ResponseType } from 'axios';
 
 if (started) app.quit();
 
@@ -103,16 +103,15 @@ const data: Record<string, any> = {};
 
 const socksProxyAgent = new SocksProxyAgent('');
 
-ipcMain.on('fetch-get', async (ev, url, from, opt: { resContent: 'text' | 'json' }) => {
+ipcMain.on('fetch-get', async (ev, url, from, opt: { responseType: ResponseType }) => {
 
-	const { resContent='json' } = opt || {};
+	const { responseType='json' } = opt || {};
 
-	const res = !lastUrls.includes(url) &&
-		await axios.get(url, { httpsAgent: socksProxyAgent, headers: { 'Content-type': resContent === 'json' ? 'application/json' : 'text/html; charset=UTF-8' } });
+	const res = !lastUrls.includes(url) && await axios.get(url, { httpsAgent: socksProxyAgent, responseType });
 
-		if(from === 'start_window') {
-			!lastUrls.includes(url) && (data[url] = res.data ? { url, data: res.data } : false);
-			lastUrls.push(url);
-			startWindow.webContents.send('fetch-data', data[url]);
-		}
+	if(from === 'start_window') {
+		!lastUrls.includes(url) && (data[url] = res.data ? { url, data: res.data } : false);
+		lastUrls.push(url);
+		startWindow.webContents.send('fetch-data', data[url]);
+	}
 })
