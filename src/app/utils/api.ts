@@ -9,15 +9,17 @@ const format = (text: string, ...args: string[]) => {
 class API {
 	private news_url    = `https://newsapi.org/v2/everything?q={0}&from={1}&sortBy=popularity&apiKey=${NEWS_API_KEY}`;
 	private games_url   = 'https://www.freetogame.com/api/games';
-	private weather_url = `https://wttr.in/`;
+	private weather_url = `https://wttr.in/{0}`;
 
 
 	private _handleRequest<T = any>(urlRes: string) {
-		return new Promise<T>(resolve => electronAPI.onFetchData((data) => data.url === urlRes && resolve(data.data)))
+		return new Promise<T>(resolve => electronAPI.onListenFetchData((data) => data.url === urlRes && resolve(data.data)))
 	}
 
 	getNews<T = any>(q = 'Microsoft') {
-		const url = format(this.news_url, q, new Date().toLocaleDateString().replace(/\./g, '-'));
+		const nowDate = new Date().toLocaleDateString().replace(/\./g, '-');
+		const url = format(this.news_url, q, nowDate);
+
 		apiNodeFetch.GET(url);
 		
 		return this._handleRequest<T>(url);
@@ -30,7 +32,8 @@ class API {
 	}
 
 	getWeatherContent<T = any>(city = 'Moscow') {
-		const url = this.weather_url + city;
+		const url = format(this.weather_url, city);
+
 		apiNodeFetch.GET(url, 'start_window', { responseType: 'text' })
 
 		return this._handleRequest<T>(url);
