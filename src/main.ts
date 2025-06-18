@@ -87,6 +87,10 @@ ipcMain.on('close-app', () => {
 
 })
 
+ipcMain.on('is-open-window', () => {
+	mainWindow.webContents.send('get-is-open-window', Boolean(startWindow));
+})
+
 const lastUrls: string[] = [];
 const dataCash: Record<string, any> = {};
 
