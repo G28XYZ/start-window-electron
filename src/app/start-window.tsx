@@ -1,16 +1,9 @@
 import React, { useState } from "react"
-import { Games, NewsContainer, Weather } from "./components";
+import { Games, NewsContainer, Profile, RecommendApps, Weather } from "./components";
 
 export const StartWindow = () => {
 
 	const handleShutdown = () => electronAPI.closeApp();
-
-	const RecentApp = ({ name, base64 }: typeof RECENT_APPS[number]) => {
-		return <div key={name} className="recent-app">
-				<img src={base64} alt={name} loading='lazy' />
-				<div>{name}</div>
-			</div>
-	}
 
 	const Search = () => {
 		const [value, setValue] = useState('');
@@ -20,28 +13,26 @@ export const StartWindow = () => {
 			</label>
 	}
 
+	const nowText = <div style={{ textAlign: 'center' }}>Сегодня &#8226; {new Date().toLocaleDateString()}</div>;
+
+	const startMenuContent =
+		<div className="start-menu-content">
+			<RecommendApps />
+			<div style={{ maxHeight: '70vh', overflow: 'auto', maxWidth: '70vw', width: '100%' }}>
+				<NewsContainer />
+				<Games />
+				<Weather />
+			</div>
+		</div>
 
 	return <main className="start-menu-container">
 		<div className="start-menu">
 			<Search />
-			<div style={{ textAlign: 'center' }}>Сегодня 	&#8226; {new Date().toLocaleDateString()}</div>
-			<div className="start-menu-content">
-				<div className="start-menu-content-recent">
-					Рекомендации
-					{RECENT_APPS.map(item => <RecentApp key={item.name} {...item} />)}
-				</div>
-				<div style={{ maxHeight: '70vh', overflow: 'auto', maxWidth: '70vw', width: '100%' }}>
-					<NewsContainer />
-					<Games />
-					<Weather />
-				</div>
-			</div>
+			{nowText}
+			{startMenuContent}
 		</div>
 		<div className="start-menu-footer">
-			<div className="start-menu-profile">
-				<div className="start-menu-avatar"></div>
-				<div className="start-menu-username">WindowsUser</div>
-			</div>
+			<Profile />
 			<div className="start-menu-shutdown" onClick={handleShutdown}/>
 		</div>
 	</main>
