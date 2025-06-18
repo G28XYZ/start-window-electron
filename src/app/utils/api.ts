@@ -11,9 +11,33 @@ class API {
 	private games_url   = 'https://www.freetogame.com/api/games';
 	private weather_url = `https://wttr.in/{0}`;
 
+	private resolveUrls: Array<(value: any) => boolean> = [];
+
+	constructor() {
+		electronAPI.onListenFetchData((data) => {
+			let idx = 0;
+			for(const fn of this.resolveUrls) {
+				idx += 1;
+				if(fn && fn(data)) this.resolveUrls[idx] = null;
+				
+			}
+			this.resolveUrls = this.resolveUrls.filter(Boolean);
+		})
+	}
 
 	private _handleRequest<T = any>(urlRes: string) {
-		return new Promise<T>(resolve => electronAPI.onListenFetchData((data) => data.url === urlRes && resolve(data.data)))
+		return new Promise<T>(resolve => {
+			const index = this.resolveUrls.push(
+				(data: any) => {
+					if(data.url === urlRes) {
+						this.resolveUrls.splice(index - 1, 1)
+						resolve(data.data);
+						return true;
+					}
+					return false
+				}
+			)
+		})
 	}
 
 	getNews<T = any>(q = 'Microsoft') {
@@ -40,9 +64,11 @@ class API {
 	}
 
 	getImage<T = any>(url: string) {
-		apiNodeFetch.GET(url, 'start_window', { responseType: 'arraybuffer' })
-
-		return this._handleRequest<T>(url);
+		if(url) {
+			apiNodeFetch.GET(url, 'start_window', { responseType: 'arraybuffer' })
+	
+			return this._handleRequest<T>(url);
+		}
 	}
 }
 

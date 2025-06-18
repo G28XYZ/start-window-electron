@@ -42,7 +42,12 @@ app.on('activate', () => {
 	if (BrowserWindow.getAllWindows().length === 0) createWindow();
 });
 
-ipcMain.on('open-start-window', () => {
+ipcMain.on('toggle-start-window', () => {
+	if(startWindow) {
+		startWindow.close();
+		startWindow = null;
+		return;
+	}
 	const primaryDisplay = screen.getPrimaryDisplay();
 	const [_, mainY] = mainWindow.getPosition();
 	const { width } = primaryDisplay.size;
@@ -66,15 +71,6 @@ ipcMain.on('open-start-window', () => {
 	} else {
 		startWindow.loadFile(path.join(__dirname, `../renderer/${MAIN_WINDOW_VITE_NAME}/index.html`));
 	}
-});
-
-ipcMain.on('close-start-window', () => {
-	
-	if(startWindow) {
-		startWindow.close();
-		startWindow = null;
-	}
-
 });
 
 ipcMain.on('close-app', () => {

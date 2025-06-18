@@ -5,8 +5,7 @@ export const StartButton = () => {
 
 	const handleClick = async () => {
 		setIsOpen(!isOpen);
-		if(isOpen) electronAPI.closeStartWindow();
-		else electronAPI.openStartWindow();
+		electronAPI.toggleStartWindow();
 	}
 
 	return <div className='start-icon-container'>
