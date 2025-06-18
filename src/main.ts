@@ -22,30 +22,24 @@ const createWindow = () => {
 		y             : height - winHeight,
 		frame         : false,
 		transparent   : true,
-		webPreferences: { preload: path.join(__dirname, 'preload.js') },
+		webPreferences: { preload: path.join(__dirname, 'preload-start.js') },
   });
 
-  if (MAIN_WINDOW_VITE_DEV_SERVER_URL) {
-    mainWindow.loadURL(MAIN_WINDOW_VITE_DEV_SERVER_URL);
-  } else {
-    mainWindow.loadFile(path.join(__dirname, `../renderer/${MAIN_WINDOW_VITE_NAME}/index.html`));
-  }
-
-  // mainWindow.webContents.openDevTools();
+	if (MAIN_WINDOW_VITE_DEV_SERVER_URL) {
+		mainWindow.loadURL(MAIN_WINDOW_VITE_DEV_SERVER_URL);
+	} else {
+		mainWindow.loadFile(path.join(__dirname, `../renderer/${MAIN_WINDOW_VITE_NAME}/index.html`));
+	}
 };
 
 app.on('ready', createWindow);
 
 app.on('window-all-closed', () => {
-  if (process.platform !== 'darwin') {
-    app.quit();
-  }
+	if (process.platform !== 'darwin') app.quit();
 });
 
 app.on('activate', () => {
-  if (BrowserWindow.getAllWindows().length === 0) {
-    createWindow();
-  }
+	if (BrowserWindow.getAllWindows().length === 0) createWindow();
 });
 
 ipcMain.on('open-start-window', () => {
@@ -67,14 +61,11 @@ ipcMain.on('open-start-window', () => {
 	});
 
 
-  if (MAIN_WINDOW_VITE_DEV_SERVER_URL) {
-    startWindow.loadURL(MAIN_WINDOW_VITE_DEV_SERVER_URL + '/start_window');
-  } else {
-    startWindow.loadFile(path.join(__dirname, `../renderer/${MAIN_WINDOW_VITE_NAME}/index.html`));
-  }
-
-	// mainWindow.focus();
-
+	if (MAIN_WINDOW_VITE_DEV_SERVER_URL) {
+		startWindow.loadURL(MAIN_WINDOW_VITE_DEV_SERVER_URL + '/start_window');
+	} else {
+		startWindow.loadFile(path.join(__dirname, `../renderer/${MAIN_WINDOW_VITE_NAME}/index.html`));
+	}
 });
 
 ipcMain.on('close-start-window', () => {
@@ -91,9 +82,9 @@ ipcMain.on('close-app', () => {
 		startWindow.destroy();
 		startWindow = null;
 	}
-	if(mainWindow) {
-		mainWindow.destroy();
-	}
+
+	if(mainWindow) mainWindow.destroy();
+
 })
 
 const lastUrls: string[] = [];

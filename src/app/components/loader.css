@@ -8,27 +8,24 @@
 
 .loader-wrapper {
   position: absolute;
-  /* transform: translate(50%, -50%); */
-  /* top: 50%; */
-  /* left: 50%; */
 }
 
 .loader {
   height: 25px;
- width: 1px;
- position: absolute;
- animation: rotate 3.5s linear infinite;
+  width: 1px;
+  position: absolute;
+  animation: rotate 3.5s linear infinite;
 }
 
 .loader .dot{
   top: 30px;
- height: 7px;
- width: 7px;
- background: #fff;
- border-radius: 50%;
- position: relative;
+  height: 7px;
+  width: 7px;
+  background: #fff;
+  border-radius: 50%;
+  position: relative;
 }
-.text{
+.text {
   position: absolute;
   bottom: -85px;
   font-size: 25px;
@@ -36,6 +33,7 @@
   font-family: 'Poppins',sans-serif;
   color: #fff;
 }
+
 @keyframes rotate {
   30%{
     transform: rotate(220deg);

@@ -1,5 +1,5 @@
-import { ElectronAPI } from './src/electronAPI';
-import { ApiNodeFetch }from './src/apiNodeFetch';
+import { ElectronAPI } from './src/api/electronAPI';
+import { ApiNodeFetch }from './src/api/apiNodeFetch';
 
 
 declare global {

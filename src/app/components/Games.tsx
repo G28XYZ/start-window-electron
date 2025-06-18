@@ -5,7 +5,7 @@ import { Loader } from "./Loader";
 
 export const Game = ({ data }: { data: IGame }) => {
 	const [_, setIsHover] = useState(false);
-	const [imgSrc, setImageSrc] = useState(data.thumbnail)
+	const [imgSrc, setImageSrc] = useState(data.thumbnail);
 
 	const handleClick = () => {
 		const link = document.createElement('a');
@@ -25,9 +25,9 @@ export const Game = ({ data }: { data: IGame }) => {
 	}, [data.thumbnail])
 
 	return <div onClick={handleClick} className="games-item" onMouseEnter={() => setIsHover(true)} onMouseLeave={() => setIsHover(false)}>
-		<img src={imgSrc} alt={data.title} loading='lazy' />
-		<div className="games-title">{data.title}</div>
-	</div>
+			<img src={imgSrc} alt={data.title} loading='lazy' />
+			<div className="games-title">{data.title}</div>
+		</div>
 }
 
 
