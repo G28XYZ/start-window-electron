@@ -23,6 +23,7 @@ const createWindow = () => {
 		frame         : false,
 		transparent   : true,
 		webPreferences: { preload: path.join(__dirname, 'preload-start.js') },
+		icon          : path.join(__dirname, '..', '..', 'src', 'app', 'images', 'rBmc.png')
   });
 
 	if (MAIN_WINDOW_VITE_DEV_SERVER_URL) {
@@ -63,6 +64,7 @@ ipcMain.on('toggle-start-window', () => {
 		y             : mainY - winHeight - 25,
 		title         : 'Start Window',
 		webPreferences: { preload: path.join(__dirname, 'preload-window.js') },
+		icon          : path.join(__dirname, '..', '..', 'src', 'app', 'images', 'rBmc.png')
 	});
 
 

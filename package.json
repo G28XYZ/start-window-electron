@@ -16,11 +16,6 @@
     "name": "Aleksandr Kucherenko",
     "email": "g28xyz@ya.ru"
   },
-  "build": {
-    "win": {
-      "target": "portable"
-    }
-  },
   "license": "MIT",
   "devDependencies": {
     "@babel/preset-react": "^7.27.1",

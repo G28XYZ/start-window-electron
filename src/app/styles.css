@@ -19,7 +19,6 @@
 
 .start-icon-container {
   background-color: rgba(75, 75, 75, 0.6);
-  backdrop-filter: blur(1px);
   width: 100vw;
   height: 100vh;
   display: flex;
@@ -31,7 +30,6 @@
   width: 100vw;
   height: 100vh;
   background: rgba(51, 51, 51, 0.8);
-  backdrop-filter: blur(1px);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
