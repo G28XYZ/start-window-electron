@@ -1,5 +1,6 @@
 import React from "react"
 
+/** компонент с рекомендованными/открытыми недавно приложениями */
 export const RecommendApps = () => {
 
 	const RecentApp = ({ name, base64 }: typeof RECENT_APPS[number]) => {

@@ -3,6 +3,7 @@ import { api } from "../utils/api";
 import { IArticle } from "../utils/types";
 import { Loader } from "./Loader";
 
+/** компонент с информацией о новости */
 export const News = ({ data }: { data: IArticle }) => {
 	const [isHover, setIsHover] = useState(false);
 
@@ -21,14 +22,15 @@ export const News = ({ data }: { data: IArticle }) => {
 		</div>
 }
 
+/** компонент с сегодняшними новостями */
 export const NewsContainer = () => {
 	const [isLoading, setIsLoading] = useState(true);
 	const [news, setNews] = useState<IArticle[]>([]);
-	const [q, setQ] = useState('Microsoft')
+	const [q, setQ] = useState('Microsoft');
 
 	useEffect(() => {
-		const res = api.getNews(q);
-		res.then(data => {
+		/** запрос на получение новостей */
+		api.getNews(q).then(data => {
 			setIsLoading(false);
 			setNews(data?.articles?.slice(0, 10) || [])
 		});

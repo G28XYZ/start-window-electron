@@ -3,14 +3,14 @@ import { useDebounce } from "../utils/hooks";
 import { api } from "../utils/api";
 import { Loader } from "./Loader";
 
+/** компонент с погодой в городе */
 export const Weather = () => {
 	const [isLoading, setIsLoading] = useState(true);
 	const [city, setCity] = useState('Москва');
 	const iframeRef = useRef<HTMLIFrameElement>(null);
 
 	const onGetData = useCallback((city: string) => {
-		api.getWeatherContent(city).then(data => {
-			console.log(iframeRef.current);
+		city && api.getWeatherContent(city).then(data => {
 			if(data && iframeRef.current) {
 				const doc = iframeRef.current.contentDocument;
 				doc.open();
@@ -27,7 +27,15 @@ export const Weather = () => {
 
 	return <div className="start-menu-content-weather">
 					<span>
-						Погода <input placeholder="Город..." type="text" name="city" id="city" value={city} onChange={(e) => { setIsLoading(true); setCity(e.target.value); debounce(e.target.value) }} />
+						Погода
+						<input
+							placeholder = "Город..."
+							type        = "text"
+							name        = "city"
+							id          = "city"
+							value       = {city}
+							onChange    = {(e) => { setIsLoading(true); setCity(e.target.value); debounce(e.target.value) }}
+						/>
 					</span>
 			{isLoading && <Loader />}
 			<iframe style={{ display: isLoading ? 'none' : 'initial' }} ref={iframeRef} src='' className="weather-content" width='100%' />

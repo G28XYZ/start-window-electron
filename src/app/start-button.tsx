@@ -1,10 +1,8 @@
-import React, { useState } from 'react';
+import React from 'react';
 
 export const StartButton = () => {
-	const [isOpen, setIsOpen] = useState(false);
 
 	const handleClick = async () => {
-		setIsOpen(!isOpen);
 		electronAPI.toggleStartWindow();
 	}
 

@@ -82,14 +82,15 @@ ipcMain.on('close-app', () => {
 	if(mainWindow) mainWindow.destroy();
 
 })
-
-ipcMain.on('is-open-window', () => {
-	mainWindow.webContents.send('get-is-open-window', Boolean(startWindow));
-})
-
+/** массив урлов которые уже запросили */
 const lastUrls: string[] = [];
+/** кэш запросов по урлу */
 const dataCash: Record<string, any> = {};
-
+/**
+ * SOCKS соединение для получение доступа до контента
+ * адрес не постоянный, держатель сервера может внести изменения и доступность пропадёт
+ * нужен т.к. у ресурсов есть ограничения по доступу из некоторых регионов
+ **/
 const socksProxyAgent = new SocksProxyAgent('socks://socksuser:socksuser@185.169.107.65:8467');
 
 ipcMain.on('fetch-get', async (ev, url, from, opt: { responseType: 'text' | 'json' | 'arraybuffer' }) => {

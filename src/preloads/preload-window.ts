@@ -1,3 +1,4 @@
+/** прелоадер для окна меню пуск */
 import { contextBridge } from 'electron';
 import { apiNodeFetch } from '../api/apiNodeFetch';
 

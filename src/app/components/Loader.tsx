@@ -2,6 +2,7 @@ import React from "react";
 
 import './loader.css';
 
+/** компонент лоадер */
 export const Loader = () => {
 	return <span className="loader-container">
 							<span className="loader-wrapper">

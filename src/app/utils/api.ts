@@ -17,9 +17,8 @@ class API {
 		electronAPI.onListenFetchData((data) => {
 			let idx = 0;
 			for(const fn of this.resolveUrls) {
-				idx += 1;
 				if(fn && fn(data)) this.resolveUrls[idx] = null;
-				
+				idx += 1;
 			}
 			this.resolveUrls = this.resolveUrls.filter(Boolean);
 		})
@@ -27,10 +26,9 @@ class API {
 
 	private _handleRequest<T = any>(urlRes: string) {
 		return new Promise<T>(resolve => {
-			const index = this.resolveUrls.push(
-				(data: any) => {
+			this.resolveUrls.push(
+				(data: { url: string; data: T }) => {
 					if(data.url === urlRes) {
-						this.resolveUrls.splice(index - 1, 1)
 						resolve(data.data);
 						return true;
 					}
