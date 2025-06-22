@@ -6,6 +6,7 @@ import { MakerRpm } from '@electron-forge/maker-rpm';
 import { VitePlugin } from '@electron-forge/plugin-vite';
 import { FusesPlugin } from '@electron-forge/plugin-fuses';
 import { FuseV1Options, FuseVersion } from '@electron/fuses';
+import { PublisherGithub } from '@electron-forge/publisher-github';
 import path from 'node:path';
 
 const config: ForgeConfig = {
@@ -16,6 +17,17 @@ const config: ForgeConfig = {
   },
   rebuildConfig: {},
   makers: [new MakerSquirrel(), new MakerZIP({}, ['darwin']), new MakerRpm({}), new MakerDeb({})],
+	publishers: [
+		new PublisherGithub({
+			repository: {
+				name: 'start-window-electron',
+				owner: 'G28XYZ'
+			},
+			authToken: process.env.GITHUB_TOKEN,
+			prerelease: false,
+			draft: true
+		}),
+	],
   plugins: [
     new VitePlugin({
       build: [
