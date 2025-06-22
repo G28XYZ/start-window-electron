@@ -1,5 +1,5 @@
 import './index.css';
-import './index';
+import './app/index';
 
 const handleKeydown = async (ev: KeyboardEvent) => {
 	console.log(ev.key, ev.ctrlKey);

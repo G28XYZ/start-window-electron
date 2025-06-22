@@ -1,7 +1,6 @@
 import { ElectronAPI } from './src/api/electronAPI';
 import { ApiNodeFetch }from './src/api/apiNodeFetch';
 
-
 declare global {
 	const electronAPI: ElectronAPI;
 	const apiNodeFetch: ApiNodeFetch;
